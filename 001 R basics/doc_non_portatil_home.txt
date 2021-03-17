@@ -1,0 +1,469 @@
+
+
+Notes / libro DataScience:
+https://rafalab.github.io/dsbook/
+
+
+Additional Notes globate laptop
+
+https://learning.edx.org/course/course-v1:HarvardX+PH125.1x+2T2020/block-v1:HarvardX+PH125.1x+2T2020+type@sequential+block@5ba06674d0be41b99185b947e09e889b/block-v1:HarvardX+PH125.1x+2T2020+type@vertical+block@0270de581ce14e949708ecb17f102399
+
+
+
+# loading the dslabs package and the murders dataset
+library(dslabs)
+data(murders)
+
+# determining that the murders dataset is of the "data frame" class
+class(murders)
+# finding out more about the structure of the object
+str(murders)
+# showing the first 6 lines of the dataset
+head(murders)
+
+# using the accessor operator to obtain the population column
+murders$population
+# displaying the variable names in the murders dataset
+names(murders)
+# determining how many entries are in a vector
+pop <- murders$population
+length(pop)
+# vectors can be of class numeric and character
+class(pop)
+class(murders$state)
+
+# logical vectors are either TRUE or FALSE
+z <- 3 == 2
+z
+class(z)
+
+# factors are another type of class
+class(murders$region)
+# obtaining the levels of a factor
+levels(murders$region)
+
+
+
+https://learning.edx.org/course/course-v1:HarvardX+PH125.1x+2T2020/block-v1:HarvardX+PH125.1x+2T2020+type@sequential+block@25784d8d534443cdacc07cb670376dff/block-v1:HarvardX+PH125.1x+2T2020+type@vertical+block@0b040e541be54353bd2f450426f29c41
+
+# We may create vectors of class numeric or character with the concatenate function
+codes <- c(380, 124, 818)
+country <- c("italy", "canada", "egypt")
+
+# We can also name the elements of a numeric vector
+# Note that the two lines of code below have the same result
+codes <- c(italy = 380, canada = 124, egypt = 818)
+codes <- c("italy" = 380, "canada" = 124, "egypt" = 818)
+
+# We can also name the elements of a numeric vector using the names() function
+codes <- c(380, 124, 818)
+country <- c("italy","canada","egypt")
+names(codes) <- country
+
+# Using square brackets is useful for subsetting to access specific elements of a vector
+codes[2]
+codes[c(1,3)]
+codes[1:2]
+
+# If the entries of a vector are named, they may be accessed by referring to their name
+codes["canada"]
+codes[c("egypt","italy")]
+
+https://learning.edx.org/course/course-v1:HarvardX+PH125.1x+2T2020/block-v1:HarvardX+PH125.1x+2T2020+type@sequential+block@25784d8d534443cdacc07cb670376dff/block-v1:HarvardX+PH125.1x+2T2020+type@vertical+block@28b5e868f81b474186e1f67b0b8b5966
+
+We said that vectors must be all of the same type. So if we try to combine, say, numbers and characters, you might expect an error:
+
+x <- c(1, "canada", 3)
+But we don’t get one, not even a warning! What happened? Look at x and its class:
+
+x
+#> [1] "1"      "canada" "3"
+class(x)
+#> [1] "character"
+R coerced the data into characters. It guessed that because you put a character string in the vector, you meant the 1 and 3 to actually be character strings "1" and “3”. The fact that not even a warning is issued is an example of how coercion can cause many unnoticed errors in R.
+
+R also offers functions to change from one type to another. For example, you can turn numbers into characters with:
+
+x <- 1:5
+y <- as.character(x)
+y
+#> [1] "1" "2" "3" "4" "5"
+You can turn it back with as.numeric:
+
+as.numeric(y)
+#> [1] 1 2 3 4 5
+This function is actually quite useful since datasets that include numbers as character strings are common.
+
+2.7.1 Not availables (NA)
+When a function tries to coerce one type to another and encounters an impossible case, it usually gives us a warning and turns the entry into a special value called an NA for “not available”. For example:
+
+x <- c("1", "b", "3")
+as.numeric(x)
+#> Warning: NAs introduced by coercion
+#> [1]  1 NA  3
+R does not have any guesses for what number you want when you type b, so it does not try.
+
+As a data scientist you will encounter the NAs often as they are generally used for missing data, a common problem in real-world datasets.
+
+https://learning.edx.org/course/course-v1:HarvardX+PH125.1x+2T2020/block-v1:HarvardX+PH125.1x+2T2020+type@sequential+block@ca59fd4193f943f7b6c653a3b3bda450/block-v1:HarvardX+PH125.1x+2T2020+type@vertical+block@d166599614df4db988aecde76899686a
+
+Key Points
+The function sort() sorts a vector in increasing order.
+The function order() produces the indices needed to obtain the sorted vector, e.g. a result of  2 3 1 5 4 means the sorted vector will be produced by listing the 2nd, 3rd, 1st, 5th, and then 4th item of the original vector.
+The function rank() gives us the ranks of the items in the original vector.
+The function max() returns the largest value, while which.max() returns the index of the largest value. The functions min() and which.min() work similarly for minimum values.
+Code
+library(dslabs)
+data(murders)
+sort(murders$total)
+
+x <- c(31, 4, 15, 92, 65)
+x
+sort(x)    # puts elements in order
+
+index <- order(x)    # returns index that will put x in order
+x[index]    # rearranging by this index puts elements in order
+order(x)
+
+murders$state[1:10]
+murders$abb[1:10]
+
+index <- order(murders$total)
+murders$abb[index]    # order abbreviations by total murders
+
+max(murders$total)    # highest number of total murders
+i_max <- which.max(murders$total)    # index with highest number of murders
+murders$state[i_max]    # state name with highest number of total murders
+
+x <- c(31, 4, 15, 92, 65)
+x
+rank(x)    # returns ranks (smallest to largest)
+
+
+****
+# Define a variable states to be the state names from the murders data frame
+states <- murders$state
+
+# Define a variable ranks to determine the population size ranks
+ranks <- rank(murders$population)
+
+# Define a variable ind to store the indexes needed to order the population values
+ind <- order(murders$population)
+
+# Create a data frame my_df with the state name and its rank and ordered from least populous to most
+my_df <- data.frame(name = states[ind], rank = ranks[ind])
+
+****
+
+https://learning.edx.org/course/course-v1:HarvardX+PH125.1x+2T2020/block-v1:HarvardX+PH125.1x+2T2020+type@sequential+block@63b7518d4edc47518dbe29c1e5db8822/block-v1:HarvardX+PH125.1x+2T2020+type@vertical+block@cf86ee91d57c44b084433941efd3db3a
+
+# The name of the state with the maximum population is found by doing the following
+murders$state[which.max(murders$population)]
+
+# how to obtain the murder rate
+murder_rate <- murders$total / murders$population * 100000
+
+# ordering the states by murder rate, in decreasing order
+murders$state[order(murder_rate, decreasing=TRUE)]
+
+# Assign city names to `city`
+city <- c("Beijing", "Lagos", "Paris", "Rio de Janeiro", "San Juan", "Toronto")
+
+# Store temperature values in `temp`
+temp <- c(35, 88, 42, 84, 81, 30)
+
+# Convert temperature into Celsius and overwrite the original values of 'temp' with these Celsius values
+temp <- 5/9 * temp - 32
+# Create a data frame `city_temps`
+city_temps <- data.frame(name = city, temperature = temp)
+
+****
+
+# Define an object `x` with the numbers 1 through 100
+x <- 1:100
+# Compute the sum
+sum(1/x^2)
+
+***
+library(dslabs)
+data(murders)
+
+# Store the per 100,000 murder rate for each state in murder_rate
+murder_rate <- murders$total / murders$population * 100000
+# Calculate the average murder rate in the US
+mean(murder_rate)
+
+****
+
+https://learning.edx.org/course/course-v1:HarvardX+PH125.1x+2T2020/block-v1:HarvardX+PH125.1x+2T2020+type@sequential+block@8028545a22f34fd5b83aa5b16d2a02ce/block-v1:HarvardX+PH125.1x+2T2020+type@vertical+block@cfb6232bd0874889964e57fe88ecba71
+
+
+# defining murder rate as before
+murder_rate <- murders$total / murders$population * 100000
+# creating a logical vector that specifies if the murder rate in that state is less than or equal to 0.71
+index <- murder_rate <= 0.71
+# determining which states have murder rates less than or equal to 0.71
+murders$state[index]
+# calculating how many states have a murder rate less than or equal to 0.71
+sum(index)
+
+# creating the two logical vectors representing our conditions
+west <- murders$region == "West"
+safe <- murder_rate <= 1
+# defining an index and identifying states with both conditions true
+index <- safe & west
+murders$state[index]
+
+
+https://learning.edx.org/course/course-v1:HarvardX+PH125.1x+2T2020/block-v1:HarvardX+PH125.1x+2T2020+type@sequential+block@8028545a22f34fd5b83aa5b16d2a02ce/block-v1:HarvardX+PH125.1x+2T2020+type@vertical+block@0aa2c5cb5b9f4497a3756e03bc25154a
+
+
+Key Points
+The function which() gives us the entries of a logical vector that are true.
+The function match() looks for entries in a vector and returns the index needed to access them.
+We use the function %in% if we want to know whether or not each element of a first vector is in a second vector.
+Code
+x <- c(FALSE, TRUE, FALSE, TRUE, TRUE, FALSE)
+which(x)    # returns indices that are TRUE
+
+# to determine the murder rate in Massachusetts we may do the following
+index <- which(murders$state == "Massachusetts")
+index
+murder_rate[index]
+
+# to obtain the indices and subsequent murder rates of New York, Florida, Texas, we do:
+index <- match(c("New York", "Florida", "Texas"), murders$state)
+index
+murders$state[index]
+murder_rate[index]
+
+x <- c("a", "b", "c", "d", "e")
+y <- c("a", "d", "f")
+y %in% x
+
+# to see if Boston, Dakota, and Washington are states
+c("Boston", "Dakota", "Washington") %in% murders$state
+
+
+# Store the murder rate per 100,000 for each state, in murder_rate
+murder_rate <- murders$total/murders$population*100000
+
+# Store the murder_rate < 1 in low
+low <- murder_rate < 1
+
+# Get the indices of entries that are below 1
+which(low)
+
+——
+# Store the murder rate per 100,000 for each state, in `murder_rate`
+murder_rate <- murders$total/murders$population*100000
+
+# Store the `murder_rate < 1` in `low`
+low <- murder_rate < 1
+
+# Create a vector ind for states in the Northeast and with murder rates lower than 1.
+ind <- low & murders$region=="Northeast"
+# Names of states in `ind`
+murders$state[ind]
+—
+# Store the murder rate per 100,000 for each state, in murder_rate
+murder_rate <- murders$total/murders$population*100000
+
+
+# Compute the average murder rate using `mean` and store it in object named `avg`
+avg <- mean(murder_rate)
+
+# How many states have murder rates below avg ? Check using sum
+sum(murder_rate < avg)
+
+—
+# Store the 3 abbreviations in a vector called `abbs` (remember that they are character vectors and need quotes)
+abbs <- c("AK","MI","IA")
+# Match the abbs to the murders$abb and store in ind
+ind <- match(abbs, murders$abb)
+# Print state names from ind
+murders$state[ind]
+
+—
+# Store the 5 abbreviations in `abbs`. (remember that they are character vectors)
+abbs <- c("MA","ME", "MI","MO","MU")
+
+# Use the %in% command to check if the entries of abbs are abbreviations in the the murders data frame
+abbs %in% murders$abb
+
+—
+# Store the 5 abbreviations in abbs. (remember that they are character vectors)
+abbs <- c("MA", "ME", "MI", "MO", "MU")
+
+# Use the `which` command and `!` operator to find out which index abbreviations are not actually part of the dataset and store in `ind`
+ind <- which(!abbs%in%murders$abb)
+
+# Names of abbreviations in `ind`
+abbs[ind]
+—
+Key Points
+To change a data table by adding a new column, or changing an existing one, we use the mutate() function.
+To filter the data by subsetting rows, we use the function filter().
+To subset the data by selecting specific columns, we use the select() function.
+We can perform a series of operations by sending the results of one function to another function using the pipe operator, %>%.
+Code
+# installing and loading the dplyr package
+install.packages("dplyr")
+library(dplyr)
+
+# adding a column with mutate
+library(dslabs)
+data("murders")
+murders <- mutate(murders, rate = total / population * 100000)
+
+# subsetting with filter
+filter(murders, rate <= 0.71)
+
+# selecting columns with select
+new_table <- select(murders, state, region, rate)
+
+# using the pipe
+murders %>% select(state, region, rate) %>% filter(rate <= 0.71)
+
+—
+Note
+The default settings in R have changed as of version 4.0, and it is no longer necessary to include the code stringsAsFactors = FALSE in order to keep strings as characters. Putting the entries in quotes, as in the example, is adequate to keep strings as characters. The stringsAsFactors = FALSE code is useful in certain other situations, but you do not need to include it when you create data frames in this manner.
+
+Key Points
+We can use the data.frame() function to create data frames.
+Formerly, the data.frame() function turned characters into factors by default. To avoid this, we could utilize the stringsAsFactors argument and set it equal to false. As of R 4.0, it is no longer necessary to include the stringsAsFactors argument, because R no longer turns characters into factors by default.
+Code
+# creating a data frame with stringAsFactors = FALSE
+grades <- data.frame(names = c("John", "Juan", "Jean", "Yao"),
+                     exam_1 = c(95, 80, 90, 85),
+                     exam_2 = c(90, 85, 85, 90),
+                     stringsAsFactors = FALSE)
+
+—
+# Note that if you want ranks from highest to lowest you can take the negative and then compute the ranks
+x <- c(88, 100, 83, 92, 94)
+rank(-x)
+
+# Defining rate
+rate <-  murders$total/ murders$population * 100000
+
+# Redefine murders to include a column named rank
+# with the ranks of rate from highest to lowest
+murders <- mutate(murders, rank(-rate))
+
+——
+# Add the necessary columns
+murders <- mutate(murders, rate = total/population * 100000, rank = rank(-rate))
+
+# Filter to show the top 5 states with the highest murder rates
+filter(murders, rank <= 5)
+—
+
+# Use filter to create a new data frame no_south
+no_south <- filter(murders, region != "South")
+# Use nrow() to calculate the number of rows
+nrow(no_south)
+
+—
+
+# Create a new data frame called murders_nw with only the states from the northeast and the west
+murders_nw <- filter(murders, region %in% c("Northeast", "West"))
+# Number of states (rows) in this category
+nrow(murders_nw)
+
+——
+# add the rate column
+murders <- mutate(murders, rate =  total / population * 100000, rank = rank(-rate))
+
+# Create a table, call it my_states, that satisfies both the conditions
+my_states <- filter(murders, region %in% c("Northeast", "West") & rate < 1)
+# Use select to show only the state name, the murder rate and the rank
+select(my_states, state, rate, rank)
+——
+
+# Load library
+library(dplyr)
+
+## Define the rate column
+murders <- mutate(murders, rate =  total / population * 100000, rank = rank(-rate))
+
+# show the result and only include the state, rate, and rank columns, all in one line, in that order
+murders %>% select(state, rate, rank)
+
+—
+# Load library
+library(dplyr)
+
+## Define the rate column
+murders <- mutate(murders, rate =  total / population * 100000, rank = rank(-rate))
+
+# show the result and only include the state, rate, and rank columns, all in one line, in that order
+murders %>% filter(region %in% c("Northeast", "West") & rate < 1) %>% select(state, rate, rank)
+
+
+—
+# Loading the libraries
+library(dplyr)
+data(murders)
+
+# Create new data frame called my_states (with specifications in the instructions)
+my_states <- murders %>% mutate(rate =  total / population * 100000, rank = rank(-rate)) %>% filter(region %in% c("Northeast", "West") & rate < 1) %>% select(state, rate, rank)
+—
+
+https://learning.edx.org/course/course-v1:HarvardX+PH125.1x+2T2020/block-v1:HarvardX+PH125.1x+2T2020+type@sequential+block@21a56d47549740af97c3ef1ee0f868a6/block-v1:HarvardX+PH125.1x+2T2020+type@vertical+block@7f840d3465df41c2b385de3481500654
+
+Key Points
+We can create a simple scatterplot using the function plot().
+Histograms are graphical summaries that give you a general overview of the types of values you have.  In R, they can be produced using the hist() function.
+Boxplots provide a more compact summary of a distribution than a histogram and are more useful for comparing distributions. They can be produced using the boxplot() function.
+Code
+# a simple scatterplot of total murders versus population
+x <- murders$population /10^6
+y <- murders$total
+plot(x, y)
+
+# a histogram of murder rates
+hist(murders$rate)
+
+# boxplots of murder rates by region
+boxplot(rate~region, data = murders)
+
+—
+
+# Load the datasets and define some variables
+library(dslabs)
+data(murders)
+
+population_in_millions <- murders$population/10^6
+total_gun_murders <- murders$total
+
+plot(population_in_millions, total_gun_murders)
+
+# Transform population using the log10 transformation and save to object log10_population
+log10_population <- log10(population_in_millions)
+# Transform total gun murders using log10 transformation and save to object log10_total_gun_murders
+log10_total_gun_murders <- log10(total_gun_murders)
+# Create a scatterplot with the log scale transformed population and murders
+plot(log10_population, log10_total_gun_murders)
+
+—
+
+# Load the datasets and define some variables
+library(dslabs)
+data(murders)
+population_in_millions <- murders$population/10^6
+total_gun_murders <- murders$total
+plot(population_in_millions, total_gun_murders)
+
+# Transform population using the log10 transformation and save to object log10_population
+log10_population<- log10(murders$population)
+
+# Transform total gun murders using log10 transformation and save to object log10_total_gun_murders
+log10_total_gun_murders <- log10(murders$total)
+
+# Create a scatterplot with the log scale transformed population and murders
+plot(log10_population, log10_total_gun_murders)
+
+——
+# Create a boxplot of state populations by region for the murders dataset
+boxplot(population~region, data = murders)

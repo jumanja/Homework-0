@@ -1,0 +1,19 @@
+Key points
+The Central Limit Theorem (CLT) says that the distribution of the sum of a random variable is approximated by a normal distribution.
+
+The expected value of a random variable,  E[𝑋]=𝜇 , is the average of the values in the urn. This represents the expectation of one draw. 
+The standard error of one draw of a random variable is the standard deviation of the values in the urn.
+The expected value of the sum of draws is the number of draws times the expected value of the random variable. 
+The standard error of the sum of independent draws of a random variable is the square root of the number of draws times the standard deviation of the urn. 
+Equations
+These equations apply to the case where there are only two outcomes,  𝑎  and  𝑏  with proportions  𝑝  and  1−𝑝  respectively. The general principles above also apply to random variables with more than two outcomes.
+
+Expected value of a random variable: 
+𝑎𝑝+𝑏(1−𝑝) 
+Expected value of the sum of n draws of a random variable: 
+𝑛×(𝑎𝑝+𝑏(1−𝑝)) 
+Standard deviation of an urn with two values: 
+∣𝑏–𝑎∣𝑝(1−𝑝)‾‾‾‾‾‾‾‾√ 
+
+Standard error of the sum of n draws of a random variable:
+𝑛√ ×∣𝑏–𝑎∣𝑝(1−𝑝)‾‾‾‾‾‾‾‾√
